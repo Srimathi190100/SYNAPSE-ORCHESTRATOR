@@ -1,22 +1,23 @@
-# Step 1: Build
+# Step 1: Build frontend
 FROM node:20 AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN rm -rf node_modules package-lock.json && npm install
+RUN npm install
 
 COPY . .
 RUN npm run build
 
-# Step 2: Serve
-FROM nginx:alpine
+# Step 2: Run server
+FROM node:20
 
-# copy build
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/server.js ./server.js
+COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server.js"]
