@@ -1,0 +1,7 @@
+{
+  "name": "Remix: Remix: Remix: Remix: AI Agent Orchestrator",
+  "description": "Functional multi-agent AI system with a Controller Agent, specialized sub-agents, and automated workflows for task management and scheduling.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

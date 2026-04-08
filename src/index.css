@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@theme {
+  --font-headline: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-surface: #0b1326;
+  --color-surface-low: #131b2e;
+  --color-surface-high: #222a3d;
+  --color-surface-highest: #2d3449;
+  --color-surface-lowest: #060e20;
+  
+  --color-primary: #4fdbc8;
+  --color-on-primary: #003731;
+  --color-secondary: #d0bcff;
+  --color-tertiary: #7bd0ff;
+  
+  --color-on-surface: #dae2fd;
+  --color-on-surface-variant: #c6c6cd;
+  --color-outline-variant: #45464d;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-sans antialiased;
+    background-image: 
+      radial-gradient(circle at 2px 2px, rgba(79, 219, 200, 0.05) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+}
+
+.brain-glow {
+  background: radial-gradient(circle, rgba(79, 219, 200, 0.15) 0%, rgba(11, 19, 38, 0) 70%);
+}
+
+.glass-panel {
+  @apply bg-surface-highest/60 backdrop-blur-xl border border-outline-variant/10;
+}
+
+.scan-line {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-primary), transparent);
+  opacity: 0.1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100vh); }
+}
+
+.mono-label {
+  @apply font-mono text-[10px] uppercase tracking-widest opacity-50;
+}
