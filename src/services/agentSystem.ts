@@ -9,6 +9,20 @@ export interface AgentActions {
   addNote: (title: string, content: string) => void;
 }
 
+function safeParse(text: string) {
+  try {
+    const cleaned = text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    return JSON.parse(cleaned);
+  } catch (e) {
+    console.error("JSON Parse Failed:", text);
+    throw e;
+  }
+}
+
 export class AgentSystem {
   private onStepUpdate: (step: WorkflowStep) => void;
   private actions: AgentActions;
@@ -31,7 +45,6 @@ export class AgentSystem {
     return step;
   }
 
-  // 🔥 helper for backend call
   private async callAI(prompt: string) {
     const res = await fetch("/api/generate", {
       method: "POST",
@@ -53,7 +66,7 @@ export class AgentSystem {
       User request: "${userInput}"
     `);
 
-    const plan = JSON.parse(responseText);
+    const plan = safeParse(responseText);
 
     controllerStep.status = 'success';
     controllerStep.description = `Plan generated: ${plan.length} steps`;
@@ -75,7 +88,7 @@ export class AgentSystem {
           Return JSON: {title, priority, dueDate}
         `);
 
-        const { title, priority, dueDate } = JSON.parse(responseText);
+        const { title, priority, dueDate } = safeParse(responseText);
 
         const result = this.actions.addTask(title, priority, dueDate || undefined);
 
@@ -90,7 +103,7 @@ export class AgentSystem {
           Return JSON: {title, time, description}
         `);
 
-        const details = JSON.parse(responseText);
+        const details = safeParse(responseText);
 
         const newItem: ScheduleItem = {
           id: generateId(),
